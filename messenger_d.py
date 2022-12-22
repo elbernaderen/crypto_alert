@@ -15,7 +15,7 @@ import yaml
 
 # Telegram user id and api_key
 
-config = yaml.load(open("ignore/telconfig.yml"), Loader=yaml.FullLoader)
+config = yaml.load(open("ignore/telconfig.yml"), Loader = yaml.FullLoader)
 
 api_key = config["api_key"]
 user_id = config["user_id"]
@@ -280,7 +280,7 @@ def make_prediction(file):
         row.append(file["rsi"][i - t])
         row.append(file["macd"][i - t])
         row.append(file["macd_h"][i - t])
-        row.append(file["macd_s"][i - t])
+        row.append(file["macd_s"][i - t]).
     row.extend([file["date"][i], file["close"][i]])
     new.loc[1] = row
     return new
