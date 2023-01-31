@@ -1,5 +1,5 @@
 import pandas as pd
-import sys
+
 import datetime
 import time
 from bina.bina import store_ohlcv
@@ -8,10 +8,6 @@ from tools.tools import RSI, macd
 import yaml
 
 ######################################################################################################
-
-running = True
-
-
 
 def mensajero(dato):
 
@@ -24,69 +20,58 @@ def mensajero(dato):
 
     name = dato.simbolo
 
-    inter_ = 60 * 5
-    hours = 150
-
-    interval_ = inter_  
-
-    while running: 
         # The signal finder is activated, and it will keep working
         # according to the interval choosed
 
-        inter_ = interval_
-
-        hour = datetime.timedelta(hours = hours)
-        hour_ = datetime.datetime.utcnow()
-        tt = hour_ - hour
+    hour = datetime.timedelta(hours = 150)
+    hour_ = datetime.datetime.utcnow()
+    tt = hour_ - hour
     
-        try:
-            store_ohlcv(
-                symbol = name, 
-                interval = "5m",
-                start_date = tt, 
-                name = "messenger"
+    try:
+        store_ohlcv(
+            symbol = name, 
+            interval = "5m",
+            start_date = tt, 
+            name = "messenger"
             )
-        except ConnectionError:
+    except ConnectionError:
 
             # If the internet is gone, we'll wait 60 seconds, and'll try again
 
-            time.sleep(60)
+        time.sleep(60)
 
-            inter_ -= 60
+        print("check your internet connection\n")
 
-            print("check your internet connection\n")
-
-            store_ohlcv(
-                symbol = name, 
-                interval = "5m",
-                start_date = tt, 
-                name = "messenger"
+        store_ohlcv(
+            symbol = name, 
+            interval = "5m",
+            start_date = tt, 
+            name = "messenger"
             )
         # Every time that pass the interval of established time,
         #  the csv file with the data is download in the "messenger" directory, 
         # and this last file will replace the previous one and a DataFrame will be created
 
-        file = pd.read_csv(f"messenger/{name}_5m_messenger.csv")
-        file = file_edit(file)
+    file = pd.read_csv(f"messenger/{name}_5m_messenger.csv")
+    file = file_edit(file)
 
         
 
-        valores_real = Valores_reales(file)
+    valores_real = Valores_reales(file)
 
-        t = f'{name} \n Valor: {valores_real.valor[0]} \n RSI: {valores_real.rsi[0]} \n Macd: {valores_real.macd[0]} \n {datetime.datetime.now()} '
+    t = f'{name} \n Valor: {valores_real.valor[0]} \n RSI: {valores_real.rsi[0]} \n Macd: {valores_real.macd[0]} \n {datetime.datetime.now()} '
+    print(t)
+
+    if itera_valores(dato, valores_real):
+
+        bot.send_message(chat_id = user_id, text = t)
+
+    else:
+
+        t = f"{name}  \n Sin alertas, esperar 5 minutos"
         print(t)
-
-        if itera_valores(dato, valores_real):
-
-            bot.send_message(chat_id = user_id, text = t)
-
-        else:
-
-            t = f"{name}  \n Sin alertas, esperar {inter_} segundos"
-            print(t)
-
-        time.sleep(inter_)
-
+        
+    return
 ######################################################################################################
 
 ######################################################################################################
@@ -152,5 +137,3 @@ def file_edit(file):
     file = file.reset_index()
     
     return file
-def salida():
-    sys.exit()
