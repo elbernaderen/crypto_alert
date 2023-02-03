@@ -1,5 +1,8 @@
 import tkinter as tk 
+from tkinter import messagebox
 from client.gui_app import Frame,barra_menu
+
+from model.mensaje import detener
 
 def main():
     #here we create the interface
@@ -16,6 +19,16 @@ def main():
     barra_menu(root)
 
     app = Frame(root = root)
+    
+    
+
+    def on_closing(): 
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            detener()
+            root.destroy()
+
+    root.protocol("WM_DELETE_WINDOW",on_closing )
+
     app.mainloop()
 
 if __name__ == "__main__":
