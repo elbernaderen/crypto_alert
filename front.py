@@ -23,7 +23,7 @@ def main():
     
 
     def on_closing(): 
-        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        if messagebox.askokcancel("Salir", "¿Desea salir?"):
             detener()
             root.destroy()
 
