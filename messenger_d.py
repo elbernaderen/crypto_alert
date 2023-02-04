@@ -20,17 +20,19 @@ def mensajero(dato):
 
     name = dato.simbolo
 
+    interval = dato.intervalo
+
         # The signal finder is activated, and it will keep working
         # according to the interval choosed
 
-    hour = datetime.timedelta(hours = 150)
+    hour = datetime.timedelta(hours = 400)
     hour_ = datetime.datetime.utcnow()
     tt = hour_ - hour
     
     try:
         store_ohlcv(
             symbol = name, 
-            interval = "5m",
+            interval = interval,
             start_date = tt, 
             name = "messenger"
             )
@@ -44,7 +46,7 @@ def mensajero(dato):
 
         store_ohlcv(
             symbol = name, 
-            interval = "5m",
+            interval = interval,
             start_date = tt, 
             name = "messenger"
             )
@@ -52,14 +54,14 @@ def mensajero(dato):
         #  the csv file with the data is download in the "messenger" directory, 
         # and this last file will replace the previous one and a DataFrame will be created
 
-    file = pd.read_csv(f"messenger/{name}_5m_messenger.csv")
+    file = pd.read_csv(f"messenger/{name}_{interval}_messenger.csv")
     file = file_edit(file)
 
         
 
     valores_real = Valores_reales(file)
 
-    t = f'{name} \n Valor: {valores_real.valor[0]} \n RSI: {valores_real.rsi[0]} \n Macd: {valores_real.macd[0]} \n {datetime.datetime.now()} '
+    t = f'{name} \n Valor: {valores_real.valor[2]} \n RSI: {valores_real.rsi[0]} \n Macd: {valores_real.macd[0]} \n {datetime.datetime.now()} '
     print(t)
 
     if itera_valores(dato, valores_real):
@@ -70,7 +72,7 @@ def mensajero(dato):
 
         t = f"{name}  \n Sin alertas, esperar 5 minutos"
         print(t)
-        
+
     return
 ######################################################################################################
 
@@ -78,10 +80,14 @@ def mensajero(dato):
 
 class Valores_reales:
     def __init__(self,row):
-        self.valor = [row["high"][0], row["low"][0]]
+
+        self.valor = [row["high"].iloc[-1], row["low"].iloc[-1],row["close"].iloc[-1]]
+
         # agregué lista para poder usar  max y min en compare
-        self.rsi = [row["rsi"][0], row["rsi"][0]]
-        self.macd = [row["macd"][0], row["macd"][0]]
+
+        self.rsi = [row["rsi"].iloc[-1], row["rsi"].iloc[-1]]
+
+        self.macd = [row["macd"].iloc[-1], row["macd"].iloc[-1]]
 
 
 
@@ -93,7 +99,7 @@ def compare(signo , e_alerta, e_real):
 
 def itera_valores(dato, valores_real):
 
-    for i in dato.elemento(valores_real):
+    for i in dato.agrega_elemento(valores_real):
 
         if len(i[0]) > 0:
 
@@ -107,7 +113,8 @@ def itera_valores(dato, valores_real):
 
                 return False
 
-    dato.quita_elemento()     
+    dato.quita_elemento()
+
     return True
 
 def file_edit(file):

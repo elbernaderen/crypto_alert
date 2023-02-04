@@ -1,23 +1,6 @@
 import numpy as np
-import pandas as pd
-#from sklearn.neighbors import radius_neighbors_graph
 
-def name_col(rows):
-    ind_row = rows + 1
-    index_ = list()
-    for cin in range(ind_row):
-        index_.append(f"volume_{cin}")
-        index_.append(f"mart_{cin}")
-        index_.append(f"mart_inv_{cin}")
-        index_.append(f"ampl_2_{cin}")
-        index_.append(f"rsi_{cin}")
-        index_.append(f"macd_{cin}")
-        index_.append(f"macd_h{cin}")
-        index_.append(f"macd_s{cin}")
-    return index_
-    # extracted from https://programmerclick.com/article/34731200625/
-
-def RSI(t, periods=10):
+def RSI(t, periods = 14):
     length = len(t)
     rsies = [np.nan]*length
          # La longitud de los datos no excede el período y no se puede calcular;
@@ -57,6 +40,7 @@ def RSI(t, periods=10):
         rs = up_avg/down_avg
         rsies[j] = 100 - 100/(1+rs)
     return rsies
+    
 def macd(file):
     df=file
     k = df['close'].ewm(span=12, adjust=False, min_periods=12).mean()
@@ -73,12 +57,3 @@ def macd(file):
     df['macd_h'] = df.index.map(macd_h)
     df['macd_s'] = df.index.map(macd_s)
     return df
-
-def name_col_2(in_):
-    ind_row = in_
-    index_ = list()
-    for cin in range(ind_row):
-        index_.append(f"salida_{cin}")
-    for cin in range(ind_row):
-        index_.append(f"salidam_{cin}")
-    return index_
