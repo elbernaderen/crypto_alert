@@ -1,4 +1,4 @@
 # crypto_alert
-Generar señales de alerta en función de los valores del mercado de cripto o de indicadores técnicos como RSI o MACd
+Este programa avisa los valores o combinación de valores del mercado de cripto y/o de indicadores técnicos como RSI o MACd y envía avisos al celular mediante un bot de Telegram.
 
 agradecimientos a https://stackoverflow.com/a/111160
