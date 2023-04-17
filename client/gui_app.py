@@ -1,16 +1,17 @@
 import tkinter as tk
 
 from model.mensaje import Valores_alerta,detener, enviar_datos
-
+from tkinter.simpledialog import askstring
+from tkinter.messagebox import showinfo
 from threading import Thread
-
+import yaml
 
 def barra_menu(root):
     barra_menu = tk.Menu(root)
     root.config(menu = barra_menu, width = 300, height = 300)
     menu_inicio = tk.Menu(barra_menu, tearoff = 0)
     barra_menu.add_cascade(label = "Inicio", menu = menu_inicio)
-    menu_inicio.add_command(label = "Sesion Telegram")
+    menu_inicio.add_command(label = "Sesion Telegram", command = cambiar_telegram())
     menu_inicio.add_command(label = "Sesion Binance")
 
 
@@ -125,3 +126,9 @@ class Frame(tk.Frame):
     
     def detener_boton(self):
         detener()
+
+def cambiar_telegram():
+    name = askstring('Name', 'What is your name?')
+
+    with open('data.yml', 'w') as outfile:
+        yaml.dump(data, outfile, default_flow_style=False)
