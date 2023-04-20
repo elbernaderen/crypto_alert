@@ -13,7 +13,7 @@ def barra_menu(root):
     menu_inicio = tk.Menu(barra_menu, tearoff = 0)
     barra_menu.add_cascade(label = "Inicio", menu = menu_inicio)
     menu_inicio.add_command(label = "Sesion Telegram", command = cambiar_telegram)
-    menu_inicio.add_command(label = "Sesion Binance")
+    menu_inicio.add_command(label = "Sesion Binance", command = cambiar_binance)
 
 
 
@@ -130,5 +130,13 @@ class Frame(tk.Frame):
 
 
 def cambiar_telegram():
-    name,names = askstring('Name', 'What is your name?')
-    print(name)
+    api_key = askstring('configuracion telegram', 'api_key')
+    user_id = askstring('configuracion telegram', 'user_id')
+    print(api_key)
+    print(user_id)
+
+def cambiar_binance():
+    api_key = askstring('configuracion telegram', 'api_key')
+    api_secret = askstring('configuracion telegram', 'api_secret')
+    print(api_key)
+    print(api_secret)
